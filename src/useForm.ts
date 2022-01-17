@@ -1,8 +1,17 @@
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 
-const useForm = ({ initialValues, validationSchema, onSubmit }) => {
+interface useFormInterface {
+  initialValues: any;
+  onSubmit: any;
+  validationSchema: any;
+}
+
+const useForm = ({
+  initialValues,
+  validationSchema,
+  onSubmit,
+}: useFormInterface) => {
   const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState(initialValues);
 
   const touchedObj = useCallback(() => {
     let obj = {};
@@ -12,15 +21,25 @@ const useForm = ({ initialValues, validationSchema, onSubmit }) => {
     return obj;
   }, [initialValues]);
 
-  const [touched, setTouched] = useState(touchedObj);
+  const errorObj = useCallback(() => {
+    let obj = {};
+    for (let key in initialValues) {
+      obj[key] = "";
+    }
+    return obj;
+  }, [initialValues]);
 
-  const handleChange = (e) => {
+  const [touched, setTouched] = useState(touchedObj);
+  const [errors, setErrors] = useState(errorObj);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedValues = Object.assign({}, values);
     updatedValues[e.target.name] = e.target.value;
     setValues(updatedValues);
   };
 
-  const handleBlur = (e) => {
+  const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedTouched = Object.assign({}, touched);
     updatedTouched[e.target.name] = true;
     setTouched(updatedTouched);
@@ -38,10 +57,20 @@ const useForm = ({ initialValues, validationSchema, onSubmit }) => {
       });
   };
 
-  const handleSubmit = (event) => {
-    onSubmit(values, event);
+  const handleSubmit = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSubmitting(true);
+    await onSubmit(values, event);
+    setIsSubmitting(false);
   };
 
-  return { values, handleChange, handleBlur, touched, errors, handleSubmit };
+  return {
+    values,
+    handleChange,
+    handleBlur,
+    touched,
+    errors,
+    handleSubmit,
+    isSubmitting,
+  };
 };
 export default useForm;
