@@ -25,5 +25,25 @@
     "typescript": "^4.5.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
+  },
+  "keywords": [
+    "formshelf",
+    "form",
+    "forms",
+    "react",
+    "react-dom",
+    "hooks",
+    "react hooks",
+    "validation",
+    "render props",
+    "validation",
+    "higher order component",
+    "hoc",
+    "react form hook",
+    "form hook"
+  ],
+  "dependencies": {
+    "@types/yup": "^0.29.13",
+    "yup": "^0.32.11"
   }
 }
